@@ -1,0 +1,6 @@
+<form action="{% url 'create' %}" method="post">
+  {% csrf_token %}
+  title<textarea name="post_title" rows="1" cols="80">{{post.post_title}}</textarea><br>
+  text<textarea name="post_text" rows="8" cols="80">{{post.post_text}}</textarea><br>
+  <input type="submit" value="Create">
+</form>

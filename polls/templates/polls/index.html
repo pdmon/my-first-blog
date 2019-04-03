@@ -1,0 +1,12 @@
+{% if post_list %}
+  <form action="{% url 'new' %}">
+    <input type="submit" value="New Post"></input>
+  </form>
+    <ul>
+    {% for post in post_list %}
+        <li><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

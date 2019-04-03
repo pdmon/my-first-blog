@@ -1,0 +1,32 @@
+<dl>
+  <form action="{% url 'index' %}">
+    <input type="submit" value="list">
+  </form>
+  <form action="{% url 'modify' post.id %}" method="post">
+    {% csrf_token %}
+    <dt>
+      title
+      <textarea name="post_title" rows="1" cols="80">{{post.post_title}}</textarea>
+    </dt>
+    <dt>
+      text
+      <textarea name="post_text" rows="8" cols="80">{{post.post_text}}</textarea>
+    </dt>
+    <input type="submit" value="modify">
+  </form>
+  <dl>
+    {% for cmt in comment %}
+    <dt>
+      {{comment.comment_text}}
+    </dt>
+    {% endfor %}
+    <dt>
+      Write comment
+      <form method="post">
+        {% csrf_token %}
+        <textarea name="comment_text" rows="1" cols="80"></textarea>
+        <input type="submit" value="Write">
+      </form>
+    </dt>
+  </dl>
+</dl>
