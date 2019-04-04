@@ -2,6 +2,9 @@
   <form action="{% url 'index' %}">
     <input type="submit" value="list">
   </form>
+  <form action="{% url 'remove' post.id %}">
+    <input type="submit" value="Delete">
+  </form>
   <form action="{% url 'modify' post.id %}" method="post">
     {% csrf_token %}
     <dt>

@@ -45,3 +45,8 @@ def comment(request, post_id):
     p = Post.objects.get(pk=post_id)
     p.comment_set.create(comment_text=request.POST['comment_text'], comment_date=timezone.now())
     return HttpResponseRedirect(reverse('detail', args=(p.id,)))
+
+def remove(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    post.delete()
+    return HttpResponseRedirect(reverse('index'))
