@@ -9,11 +9,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
 
-g_id = 'dudududu'
 
 def home(request):
-    g_id = 'dudududu'
-    if g_id == 'dudududu':
+    if not 'id' in request.session:
         return render(request, 'polls/login.html')
     else:
         return HttpResponseRedirect(reverse('index'))
@@ -22,10 +20,9 @@ def login(request):
     if User.objects.filter(u_id=request.POST['id']).count() == 1:
         user = User.objects.get(u_id=request.POST['id'])
         if user.u_passwd == request.POST['passwd']:
-            global g_id
-            g_id = user.u_id
+            request.session['id'] = user.u_id
             return HttpResponseRedirect(reverse('index'))
-    messages.success(request, "로그인실패")
+    messages.error(request, "로그인실패")
     return HttpResponseRedirect(reverse('home'))
 
 def register(request):
@@ -37,13 +34,12 @@ def register_do(request):
     if User.objects.filter(u_id=request.POST['id']).count() == 1:
         raise Http404("존재하는 아이디입니다.")
     User.objects.create(u_id=request.POST['id'], u_passwd=request.POST['passwd1'])
-    global g_id
-    g_id = request.POST['id']
+    request.session['id'] = request.POST['id']
     return HttpResponseRedirect(reverse('index'))
 
 def logout(request):
-    global g_id
-    g_id = 'dudududu'
+    if 'id' in request.session:
+        del request.session['id']
     return HttpResponseRedirect(reverse('home'))
 
 def index(request):
@@ -69,27 +65,34 @@ def modify(request, post_id):
     post = Post.objects.get(pk=post_id)
     post.post_title = request.POST['post_title']
     post.post_text = request.POST['post_text']
-    global g_id
-    if g_id == post.post_author or g_id == 'admin':
+    s_id = request.session['id']
+    if s_id == post.post_author or s_id == 'admin':
+        messages.error(request, "수정되었습니다.")
         post.save()
+    else:
+        messages.error(request, "수정할 수 없습니다.")
     return HttpResponseRedirect(reverse('detail', args=(post.id,)))
 
 def new(request):
     return render(request, 'polls/new.html')
 
 def create(request):
-    global g_id
-    Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], created_date=timezone.now(), post_author=g_id)
+    s_id = request.session['id']
+    Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], created_date=timezone.now(), post_author=s_id)
     return HttpResponseRedirect(reverse('index'))
 
 def comment(request, post_id):
     p = Post.objects.get(pk=post_id)
-    p.comment_set.create(comment_text=request.POST['comment_text'], comment_date=timezone.now())
+    s_id = request.session['id']
+    p.comment_set.create(comment_text=request.POST['comment_text'], comment_date=timezone.now(), comment_author=s_id)
     return HttpResponseRedirect(reverse('detail', args=(p.id,)))
 
 def remove(request, post_id):
     post = Post.objects.get(pk=post_id)
-    global g_id
-    if g_id == post.post_author or g_id == 'admin':
+    s_id = request.session['id']
+    if s_id == post.post_author or s_id == 'admin':
         post.delete()
-    return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        messages.error(request, "삭제할 수 없습니다.")
+        return HttpResponseRedirect(reverse('detail', args=(post_id,)))

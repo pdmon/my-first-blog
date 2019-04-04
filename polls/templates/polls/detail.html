@@ -18,11 +18,15 @@
     <input type="submit" value="modify">
   </form>
   <dl>
+    <table>
     {% for cmt in comment %}
-    <dt>
-      {{cmt.comment_text}}[{{cmt.comment_date}}]
-    </dt>
+    <tr>
+      <td>{{cmt.comment_text}}</td>
+      <td>{{cmt.comment_author}}</td>
+      <td>[{{cmt.comment_date}}]</td>
+    </tr>
     {% endfor %}
+    </table>
     <dt>
       Write comment
       <form action="{% url 'comment' post.id %}" method="post">
@@ -32,4 +36,9 @@
       </form>
     </dt>
   </dl>
+  {% if messages %}
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  {% endif %}
 </dl>
