@@ -1,3 +1,9 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<form action="{% url 'index' %}">
+  <input type="submit" value="list">
+</form>
 <form action="{% url 'create' %}" method="post">
   {% csrf_token %}
   title<textarea name="post_title" rows="1" cols="80">{{post.post_title}}</textarea><br>

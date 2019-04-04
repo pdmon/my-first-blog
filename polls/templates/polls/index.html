@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<h1>Post</h1>
 {% if post_list %}
   <form action="{% url 'new' %}">
     <input type="submit" value="New Post"></input>
@@ -7,13 +11,13 @@
   </form>
   <table>
     <tr>
-      <th>제목</th>
+      <th class="table_title">제목</th>
       <th>작성자</th>
       <th>시간</th>
     </tr>
     {% for post in post_list %}
       <tr href="{% url 'detail' post.id %}">
-        <td><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></td>
+        <td name="table_title"><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></td>
         <td>{{ post.post_author }}</td>
         <td>{{ post.created_date }}</td>
       </tr>
