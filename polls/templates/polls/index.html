@@ -2,11 +2,23 @@
   <form action="{% url 'new' %}">
     <input type="submit" value="New Post"></input>
   </form>
-    <ul>
+  <form action="{% url 'logout' %}">
+    <input type="submit" value="로그아웃"></input>
+  </form>
+  <table>
+    <tr>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>시간</th>
+    </tr>
     {% for post in post_list %}
-        <li><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></li>
+      <tr href="{% url 'detail' post.id %}">
+        <td><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></td>
+        <td>{{ post.post_author }}</td>
+        <td>{{ post.created_date }}</td>
+      </tr>
     {% endfor %}
-    </ul>
+  </table>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}

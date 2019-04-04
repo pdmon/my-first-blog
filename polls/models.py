@@ -9,9 +9,8 @@ class User(models.Model):
 class Post(models.Model):
     post_title = models.CharField(max_length=100)
     post_text = models.TextField(max_length=500)
+    post_author = models.CharField(max_length=15, null=True)
     created_date = models.DateTimeField(blank=True, null=True)
-    modified_date = models.DateTimeField(blank=True, null=True)
-    post_type = models.IntegerField(default=0)
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
