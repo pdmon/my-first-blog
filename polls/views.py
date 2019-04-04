@@ -38,7 +38,7 @@ def new(request):
     return render(request, 'polls/new.html')
 
 def create(request):
-    Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], create_date=timezone.now())
+    Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], created_date=timezone.now())
     return HttpResponseRedirect(reverse('index'))
 
 def comment(request, post_id):
