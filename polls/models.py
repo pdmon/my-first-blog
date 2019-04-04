@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+class User(models.Model):
+    u_id = models.CharField(max_length=15)
+    u_passwd = models.CharField(max_length=15)
+
 class Post(models.Model):
     post_title = models.CharField(max_length=100)
     post_text = models.TextField(max_length=500)

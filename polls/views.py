@@ -2,11 +2,43 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from .models import Post,Comment
+from .models import Post, Comment, User
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib import messages
+
+id = '###'
+
+def home(request):
+    if id == '###':
+        return render(request, 'polls/login.html')
+    else:
+        return HttpResponseRedirect(reverse('index'))
+
+def login(request):
+    if User.objects.filter(u_id=request.POST['id']).count() == 1:
+        user = User.objects.get(u_id=request.POST['id'])
+        if user.u_passwd == request.POST['passwd']:
+            return HttpResponseRedirect(reverse('index'))
+    messages.success(request, "로그인실패")
+    return HttpResponseRedirect(reverse('home'))
+
+def register(request):
+    return render(request, 'polls/register.html')
+
+def register_do(request):
+    if request.POST['passwd1'] != request.POST['passwd2']:
+        raise Http404("입력한 패스워드가 다릅니다.")
+    if User.objects.filter(u_id=request.POST['id']).count() == 1:
+        raise Http404("존재하는 아이디입니다.")
+    User.objects.create(u_id=request.POST['id'], u_passwd=request.POST['passwd1'])
+#    global id = request.POST['id']
+    return HttpResponseRedirect(reverse('index'))
+
+def logout(request):
+    return HttpResponseRedirect(reverse('home'))
 
 def index(request):
     post_list = Post.objects.order_by('-created_date')[:]

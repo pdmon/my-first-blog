@@ -1,0 +1,22 @@
+<table>
+  <form action="{% url 'register_do' %}" method="post">
+    {% csrf_token %}
+    <tr>
+      <td>아이디</td>
+      <td><input type="text" name="id"/></td>
+    </tr>
+    <tr>
+      <td>패스워드</td>
+      <td><input type="password" name="passwd1"/></td>
+    </tr>
+    <tr>
+      <td>패스워드 확인</td>
+      <td><input type="password" name="passwd2"/></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="submit" value="완료">
+      </td>
+    </tr>
+  </form>
+</table>
