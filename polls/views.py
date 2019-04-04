@@ -20,7 +20,7 @@ def detail(request, post_id):
         post = Post.objects.get(pk=post_id)
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
-    comment = Comment.objects.order_by('comment_date')[:]
+    comment = post.comment_set.all()
     context = {
         'post' : post,
         'comment' : comment,
@@ -40,3 +40,8 @@ def new(request):
 def create(request):
     Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], create_date=timezone.now())
     return HttpResponseRedirect(reverse('index'))
+
+def comment(request, post_id):
+    p = Post.objects.get(pk=post_id)
+    p.comment_set.create(comment_text=request.POST['comment_text'], comment_date=timezone.now())
+    return HttpResponseRedirect(reverse('detail', args=(p.id,)))

@@ -17,14 +17,14 @@
   <dl>
     {% for cmt in comment %}
     <dt>
-      {{comment.comment_text}}
+      {{cmt.comment_text}}[{{cmt.comment_date}}]
     </dt>
     {% endfor %}
     <dt>
       Write comment
-      <form method="post">
+      <form action="{% url 'comment' post.id %}" method="post">
         {% csrf_token %}
-        <textarea name="comment_text" rows="1" cols="80"></textarea>
+        <input type="text" name="comment_text">
         <input type="submit" value="Write">
       </form>
     </dt>
