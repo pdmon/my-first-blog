@@ -16,11 +16,15 @@
       text
       <textarea name="post_text" rows="8" cols="120">{{post.post_text}}</textarea>
     </dt>
-    <input type="submit" value="modify">
+    {% if request.session.id == post.post_author %}
+      <input type="submit" value="modify">
+    {% endif %}
   </form>
+  {% if request.session.id == post.post_author %}
   <form action="{% url 'remove' post.id %}">
     <input type="submit" value="Delete">
   </form>
+  {% endif %}
   <dl>
     <h3>Comments</h3>
     <table>
