@@ -21,8 +21,8 @@ def login(request):
         user = User.objects.get(u_id=request.POST['id'])
         if user.u_passwd == request.POST['passwd']:
             request.session['id'] = user.u_id
-            return HttpResponseRedirect(reverse('index'))
-    messages.error(request, "로그인실패")
+    if not 'id' in request.session:
+        messages.error(request, "로그인실패")
     return HttpResponseRedirect(reverse('home'))
 
 def register(request):
@@ -40,7 +40,7 @@ def register_do(request):
 def logout(request):
     if 'id' in request.session:
         del request.session['id']
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('index'))
 
 def index(request):
     post_list = Post.objects.order_by('-created_date')[:]
@@ -62,6 +62,8 @@ def detail(request, post_id):
     return render(request, 'polls/detail.html', context)
 
 def modify(request, post_id):
+    if not 'id' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     post = Post.objects.get(pk=post_id)
     post.post_title = request.POST['post_title']
     post.post_text = request.POST['post_text']
@@ -74,20 +76,28 @@ def modify(request, post_id):
     return HttpResponseRedirect(reverse('detail', args=(post.id,)))
 
 def new(request):
+    if not 'id' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     return render(request, 'polls/new.html')
 
 def create(request):
+    if not 'id' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     s_id = request.session['id']
     Post.objects.create(post_title=request.POST['post_title'], post_text=request.POST['post_text'], created_date=timezone.now(), post_author=s_id)
     return HttpResponseRedirect(reverse('index'))
 
 def comment(request, post_id):
+    if not 'id' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     p = Post.objects.get(pk=post_id)
     s_id = request.session['id']
     p.comment_set.create(comment_text=request.POST['comment_text'], comment_date=timezone.now(), comment_author=s_id)
     return HttpResponseRedirect(reverse('detail', args=(p.id,)))
 
 def remove(request, post_id):
+    if not 'id' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     post = Post.objects.get(pk=post_id)
     s_id = request.session['id']
     if s_id == post.post_author or s_id == 'admin':

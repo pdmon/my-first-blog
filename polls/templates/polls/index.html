@@ -3,11 +3,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 <h1>Post</h1>
 {% if post_list %}
-  <form action="{% url 'new' %}">
-    <input type="submit" value="New Post"></input>
+  {% if not 'id' in request.session %}
+  <form action="{% url 'home' %}">
+    <input type="submit" value="로그인"></input>
   </form>
+  {% else %}
   <form action="{% url 'logout' %}">
     <input type="submit" value="로그아웃"></input>
+  </form>
+  {% endif %}
+  <form action="{% url 'new' %}">
+    <input type="submit" value="New Post"></input>
   </form>
   <table>
     <tr>

@@ -3,6 +3,9 @@ table {
   max-width: 1000px;
   font-size: small;
 }
+form {
+  display : inline;
+}
 td {
   text-align: center;
 }
