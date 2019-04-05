@@ -25,7 +25,7 @@
       <tr href="{% url 'detail' post.id %}">
         <td name="table_title"><a href="{% url 'detail' post.id %}">{{ post.post_title }}</a></td>
         <td>{{ post.post_author }}</td>
-        <td>{{ post.created_date }}</td>
+        <td>{{ post.created_date|date:"Y-m-d h:i" }}</td>
       </tr>
     {% endfor %}
   </table>
